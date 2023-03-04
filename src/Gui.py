@@ -1,14 +1,10 @@
 import tkinter as tk
 from tkinter import messagebox
-from scrape import url_find
-
 
 class Gui:
     def __init__(self):
         self.url = None
-        self.window = tk.Tk(className="GUI Webscraper").geometry("700x200")
-
-
+        self.window = tk.Tk(className=" GUI Webscraper").geometry("700x200")
 
     def setup_window(self):
         website_url_label = tk.Label(self.window,
@@ -20,7 +16,7 @@ class Gui:
         website_url_label.pack()
         website_url = tk.Entry(self.window, width=50)
         website_url.pack()
-        button = tk.Button(self.window, text="Download raw HTML", command=url_find,
+        button = tk.Button(self.window, text="Download raw HTML",
                            padx=2,
                            pady=2,
                            font=('Helvetica 15 bold', 10),
@@ -36,3 +32,4 @@ class Gui:
 
     def wrong_url(self):
         messagebox.showwarning("Missing/Invalid URL", "Must enter a valid URL")
+

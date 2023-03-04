@@ -1,5 +1,8 @@
-import scrape
+from src import scrape
+
+def main():
+    scrape.run()
 
 if __name__ == '__main__':
-    scrape.run()
+    main()
 
