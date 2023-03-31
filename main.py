@@ -1,8 +1,7 @@
 from src import scrape
 
 def main():
-    scrape.main()
+    pass
 
 if __name__ == '__main__':
     main()
-
