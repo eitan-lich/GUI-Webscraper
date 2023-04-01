@@ -6,28 +6,20 @@ import os
 from bs4 import BeautifulSoup
 
 
-def create(html, name):
+def create(html, name, element=None):
     cwd = os.getcwd()
-    dir = os.path.join(cwd, "scrape files")
-    if not os.path.exists(dir):
-        os.mkdir(dir)
+    folder = os.path.join(cwd, name)
+    if not os.path.exists(folder):
+        os.mkdir(folder)
 
-    os.chdir(dir)
-    with open(f"{name}.txt", "w", encoding="utf-8") as txt_file:
-        txt_file.write(html)
-
-
-def create_from_list(html, name):
-    cwd = os.getcwd()
-    dir = os.path.join(cwd, "scrape files")
-    if not os.path.exists(dir):
-        os.mkdir(dir)
-
-    os.chdir(dir)
-    with open(f"{name}.txt", "w", encoding="utf-8") as txt_file:
-        for line in html:
-            print(str(line))
-            txt_file.write(str(line)+"\n")
+    if element is None:
+        with open(f"{folder}/{name}.txt", "w", encoding="utf-8") as txt_file:
+            txt_file.write(html)
+    else:
+        with open(f"{folder}/{name+' '+element}.txt", "w", encoding="utf-8") as txt_file:
+            for line in html:
+                print(str(line))
+                txt_file.write(str(line) + "\n")
 
 
 def download():
@@ -45,16 +37,15 @@ def download():
 
     elif selected.get() == "Anchor tags":
         links = [link for link in soup.find_all('a')]
-        create_from_list(links, title+" Anchor tags")
+        create(links, title, "Anchor tags")
 
     elif selected.get() == "Images":
         images = [img for img in soup.find_all('img')]
-        create_from_list(images, title+" Images")
+        create(images, title, "Images")
 
     elif selected.get() == "Paragraphs":
         paragraphs = [p for p in soup.find_all('p')]
-        create_from_list(paragraphs, title+" Paragraphs")
-
+        create(paragraphs, title, "Paragraphs")
     else:
         messagebox.showwarning("No option selected", "Must select one of the options")
         return
