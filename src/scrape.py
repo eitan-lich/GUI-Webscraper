@@ -13,10 +13,10 @@ def create(html, name, element=None):
         os.mkdir(folder)
 
     if element is None:
-        with open(f"{folder}/{name}.txt", "w", encoding="utf-8") as txt_file:
+        with open(f"{folder}\\{name}.txt", "w", encoding="utf-8") as txt_file:
             txt_file.write(html)
     else:
-        with open(f"{folder}/{name+' '+element}.txt", "w", encoding="utf-8") as txt_file:
+        with open(f"{folder}\\{name+' '+element}.txt", "w", encoding="utf-8") as txt_file:
             for line in html:
                 print(str(line))
                 txt_file.write(str(line) + "\n")
