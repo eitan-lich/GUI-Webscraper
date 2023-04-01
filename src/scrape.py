@@ -2,21 +2,62 @@ import tkinter as tk
 from tkinter import messagebox
 from tkinter.ttk import *
 import requests
+import os
 from bs4 import BeautifulSoup
 
+
 def create(html, name):
+    cwd = os.getcwd()
+    dir = os.path.join(cwd, "scrape files")
+    if not os.path.exists(dir):
+        os.mkdir(dir)
+
+    os.chdir(dir)
     with open(f"{name}.txt", "w", encoding="utf-8") as txt_file:
         txt_file.write(html)
 
-def url_find():
-    URL = url.get()
-    if URL == "":
+
+def create_from_list(html, name):
+    cwd = os.getcwd()
+    dir = os.path.join(cwd, "scrape files")
+    if not os.path.exists(dir):
+        os.mkdir(dir)
+
+    os.chdir(dir)
+    with open(f"{name}.txt", "w", encoding="utf-8") as txt_file:
+        for line in html:
+            print(str(line))
+            txt_file.write(str(line)+"\n")
+
+
+def download():
+    url = url_string.get()
+    if url == "":
         messagebox.showwarning("Missing/Invalid URL", "Must enter a valid URL")
         return
-    response = requests.get(URL)
+
+    response = requests.get(url)
     soup = BeautifulSoup(response.text, "html.parser")
     title = soup.title.string
-    create(soup.prettify(), title)
+
+    if selected.get() == "Full HTML":
+        create(soup.prettify(), title)
+
+    elif selected.get() == "Anchor tags":
+        links = [link for link in soup.find_all('a')]
+        create_from_list(links, title+" Anchor tags")
+
+    elif selected.get() == "Images":
+        images = [img for img in soup.find_all('img')]
+        create_from_list(images, title+" Images")
+
+    elif selected.get() == "Paragraphs":
+        paragraphs = [p for p in soup.find_all('p')]
+        create_from_list(paragraphs, title+" Paragraphs")
+
+    else:
+        messagebox.showwarning("No option selected", "Must select one of the options")
+        return
 
 
 root = tk.Tk()
@@ -26,30 +67,28 @@ root.geometry("500x250")
 website_url_label = Label(root, text="Website URL:")
 website_url_label.pack()
 
-url = tk.StringVar()
-website_url = Entry(root,textvariable=url, width=50)
+url_string = tk.StringVar()
+website_url = Entry(root, textvariable=url_string, width=50)
 website_url.pack()
 
-URL = website_url.get()
-
-full_html = tk.StringVar()
-cb_full_html = Checkbutton(root, text="Full HTML",variable=full_html, onvalue="Full HTML added", offvalue="Full HTML removed")
-cb_full_html.pack()
-
-anchor_tags = tk.StringVar()
-cb_a_tags = Checkbutton(root, text="Anchor tags",variable=anchor_tags, onvalue="Anchor tags added", offvalue="Anchor tags removed")
-cb_a_tags.pack()
-
-images = tk.StringVar()
-cb_images = Checkbutton(root, text="Images", variable=images, onvalue="Images added", offvalue="Images removed")
-cb_images.pack()
-
-paragraph = tk.StringVar()
-cb_paragraphs = Checkbutton(root, text="Paragraphs", variable=paragraph, onvalue="Paragrahs added", offvalue="Paragraphs removed")
-cb_paragraphs.pack()
+selected = tk.StringVar()
+rb_full_html = Radiobutton(root, text="Full HTML", value="Full HTML", variable=selected)
+rb_full_html.pack()
 
 
-download_btn = Button(root, text="Download", command=url_find)
+rb_a_tags = Radiobutton(root, text="Anchor tags", value="Anchor tags", variable=selected)
+rb_a_tags.pack()
+
+
+rb_images = Radiobutton(root, text="Images", value="Images", variable=selected)
+rb_images.pack()
+
+
+rb_paragraphs = Radiobutton(root, text="Paragraphs", value="Paragraphs", variable=selected)
+rb_paragraphs.pack()
+
+
+download_btn = Button(root, text="Download", command=download)
 download_btn.pack()
 
 root.mainloop()
