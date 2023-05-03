@@ -1,13 +1,12 @@
 # GUI-Webscraper
 
-## Basic webscraper with a GUI (Graphical user interface) built using Tkinter
-and BeautifulSoup
+## Basic webscraper with a GUI (Graphical user interface) built using Tkinter and BeautifulSoup
 
 ![image](https://user-images.githubusercontent.com/124390844/236011867-54410f3d-28b6-4092-8df4-d49ec3ab4f82.png)
 
 
-### Enter a valid URL into the input and select the element (or the entire HTML page) you wish to scrape.
-The program will automatically make a new folder with the title of website the URL belongs to and create a file with the output according to your choice.
+### Enter a valid URL and select the element (or the entire HTML page) you wish to scrape.
+The program will automatically make a new folder with the title of the website the URL belongs to and create a file with the output according to your choice.
 
 
 ### Enter a URL and choose the option you want.
