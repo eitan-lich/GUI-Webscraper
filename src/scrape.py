@@ -17,7 +17,7 @@ def create(html, name, element=None):
         with open(f"{folder}/{name}.txt", "w", encoding="utf-8") as txt_file:
             txt_file.write(html)
     else:
-        with open(f"{folder}/{name+' '+element}.txt", "w", encoding="utf-8") as txt_file:
+        with open(f"{folder}/{name + ' ' + element}.txt", "w", encoding="utf-8") as txt_file:
             for line in html:
                 txt_file.write(str(line) + "\n")
 
@@ -25,10 +25,18 @@ def create(html, name, element=None):
 def download():
     url = url_string.get()
     if url == "":
-        messagebox.showwarning("Missing/Invalid URL", "Must enter a valid URL")
+        messagebox.showwarning("Missing URL", "Must enter a valid URL")
         return
 
-    response = requests.get(url)
+    try:
+        response = requests.get(url)
+        if response.status_code != 200:
+            messagebox.showwarning("Not a valid URL", "Make sure the URL starts with HTTP/HTTPS")
+            return
+    except requests.exceptions.MissingSchema:
+        messagebox.showwarning("Not a valid URL", "Make sure the URL starts with HTTP/HTTPS")
+        return
+
     soup = BeautifulSoup(response.text, "html.parser")
     title = soup.title.string
 
@@ -50,6 +58,7 @@ def download():
         messagebox.showwarning("No option selected", "Must select one of the options")
         return
 
+
 def create_gui():
     global url_string
     global selected
@@ -69,21 +78,16 @@ def create_gui():
     rb_full_html = Radiobutton(root, text="Full HTML", value="Full HTML", variable=selected)
     rb_full_html.pack()
 
-
     rb_a_tags = Radiobutton(root, text="Anchor tags", value="Anchor tags", variable=selected)
     rb_a_tags.pack()
-
 
     rb_images = Radiobutton(root, text="Images", value="Images", variable=selected)
     rb_images.pack()
 
-
     rb_paragraphs = Radiobutton(root, text="Paragraphs", value="Paragraphs", variable=selected)
     rb_paragraphs.pack()
-
 
     download_btn = Button(root, text="Download", command=download)
     download_btn.pack()
 
     root.mainloop()
-
