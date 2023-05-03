@@ -9,16 +9,16 @@ from bs4 import BeautifulSoup
 def create(html, name, element=None):
     cwd = os.getcwd()
     folder = os.path.join(cwd, name)
+    print(folder)
     if not os.path.exists(folder):
         os.mkdir(folder)
 
     if element is None:
-        with open(f"{folder}\\{name}.txt", "w", encoding="utf-8") as txt_file:
+        with open(f"{folder}/{name}.txt", "w", encoding="utf-8") as txt_file:
             txt_file.write(html)
     else:
-        with open(f"{folder}\\{name+' '+element}.txt", "w", encoding="utf-8") as txt_file:
+        with open(f"{folder}/{name+' '+element}.txt", "w", encoding="utf-8") as txt_file:
             for line in html:
-                print(str(line))
                 txt_file.write(str(line) + "\n")
 
 
@@ -50,37 +50,40 @@ def download():
         messagebox.showwarning("No option selected", "Must select one of the options")
         return
 
+def create_gui():
+    global url_string
+    global selected
 
-root = tk.Tk()
-root.title("GUI Webscraper")
-root.geometry("500x250")
+    root = tk.Tk()
+    root.title("GUI Webscraper")
+    root.geometry("500x250")
 
-website_url_label = Label(root, text="Website URL:")
-website_url_label.pack()
+    website_url_label = Label(root, text="Website URL:")
+    website_url_label.pack()
 
-url_string = tk.StringVar()
-website_url = Entry(root, textvariable=url_string, width=50)
-website_url.pack()
+    url_string = tk.StringVar()
+    website_url = Entry(root, textvariable=url_string, width=50)
+    website_url.pack()
 
-selected = tk.StringVar()
-rb_full_html = Radiobutton(root, text="Full HTML", value="Full HTML", variable=selected)
-rb_full_html.pack()
-
-
-rb_a_tags = Radiobutton(root, text="Anchor tags", value="Anchor tags", variable=selected)
-rb_a_tags.pack()
-
-
-rb_images = Radiobutton(root, text="Images", value="Images", variable=selected)
-rb_images.pack()
+    selected = tk.StringVar()
+    rb_full_html = Radiobutton(root, text="Full HTML", value="Full HTML", variable=selected)
+    rb_full_html.pack()
 
 
-rb_paragraphs = Radiobutton(root, text="Paragraphs", value="Paragraphs", variable=selected)
-rb_paragraphs.pack()
+    rb_a_tags = Radiobutton(root, text="Anchor tags", value="Anchor tags", variable=selected)
+    rb_a_tags.pack()
 
 
-download_btn = Button(root, text="Download", command=download)
-download_btn.pack()
+    rb_images = Radiobutton(root, text="Images", value="Images", variable=selected)
+    rb_images.pack()
 
-root.mainloop()
+
+    rb_paragraphs = Radiobutton(root, text="Paragraphs", value="Paragraphs", variable=selected)
+    rb_paragraphs.pack()
+
+
+    download_btn = Button(root, text="Download", command=download)
+    download_btn.pack()
+
+    root.mainloop()
 
